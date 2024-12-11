@@ -41,7 +41,7 @@ public class AuthController {
 		if(id != null) {
 			User user = authService.getUser(id);
 			result.put("msg", "success");
-			result.put("data", user);
+			result.put("user", user);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.put("msg", "token제대로 안됨");
