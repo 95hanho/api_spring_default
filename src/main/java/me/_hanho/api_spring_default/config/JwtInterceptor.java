@@ -17,7 +17,7 @@ import me._hanho.api_spring_default.service.TokenService;
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(FileService.class);
+	private static final Logger logger = LoggerFactory.getLogger(JwtInterceptor.class);
 	
 	@Autowired
 	private TokenService tokenService;

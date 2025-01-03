@@ -29,7 +29,7 @@ import me._hanho.api_spring_default.service.TokenService;
 @RequestMapping("/auth")
 public class AuthController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(FileService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
 	private AuthService authService;

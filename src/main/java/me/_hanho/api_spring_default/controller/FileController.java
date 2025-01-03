@@ -31,7 +31,7 @@ import me._hanho.api_spring_default.service.FileService;
 @RequestMapping("/file")
 public class FileController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(FileService.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 	
 	@Value("${spring.servlet.multipart.location}")
     private String uploadDir;
