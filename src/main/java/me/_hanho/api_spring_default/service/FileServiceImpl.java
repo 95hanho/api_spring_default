@@ -3,8 +3,9 @@ package me._hanho.api_spring_default.service;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.jsonwebtoken.io.IOException;
@@ -13,6 +14,9 @@ import me._hanho.api_spring_default.repository.FileRepository;
 @Service
 public class FileServiceImpl implements FileService {
 
+	@Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+	
 	@Autowired
 	private FileRepository fileDAO;
 	
@@ -29,6 +33,7 @@ public class FileServiceImpl implements FileService {
 
 	
 	@Override
+	@Transactional
 	public void fileUpload(MultipartFile file, String id) {
 		// 파일명 설정
 		String originalFileName = file.getOriginalFilename();
@@ -48,12 +53,14 @@ public class FileServiceImpl implements FileService {
 		// 파일 저장
 		try {
 			// 클래스패스에서 "downloads" 폴더 경로 가져오기
-	        ClassPathResource resource = new ClassPathResource("downloads/");
-	        File downloadsDir = resource.getFile();
-	        System.out.println("save downloadsDir : " + downloadsDir);
+//	        ClassPathResource resource = new ClassPathResource("downloads/");
+//	        File downloadsDir = resource.getFile();
+	        
+			String filePath = uploadDir + "/" + fileName;
+	        System.out.println("save downloadsDir : " + filePath);
 
 	        // 저장 경로 생성
-	        File dest = new File(downloadsDir, fileName);
+	        File dest = new File(filePath);
 			
 			file.transferTo(dest);
 		} catch (IllegalStateException | java.io.IOException e) {
@@ -64,32 +71,29 @@ public class FileServiceImpl implements FileService {
 	}
 	
 	public boolean deleteFile(String fileName) throws IOException {
-		try {
-			// 클래스패스에서 "downloads" 폴더 경로 가져오기
-	        ClassPathResource resource = new ClassPathResource("downloads/");
-	        File downloadsDir = resource.getFile();
-	        System.out.println("delete downloadsDir : " + downloadsDir);
-	        
-	        File file = new File(downloadsDir, fileName);
-	        
-	        // 파일 존재 여부 확인
-	        if (file.exists()) {
-	            // 파일 삭제
-	            boolean deleted = file.delete();
-	            if (deleted) {
-	                System.out.println("파일 삭제 성공: " + fileName);
-	            } else {
-	                System.out.println("파일 삭제 실패: " + fileName);
-	            }
-	            return deleted;
-	        } else {
-	            System.out.println("파일이 존재하지 않습니다: " + fileName);
-	            return false;
-	        }
-		} catch (java.io.IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		// 클래스패스에서 "downloads" 폴더 경로 가져오기
+//	        ClassPathResource resource = new ClassPathResource("downloads/");
+//	        File downloadsDir = resource.getFile();
+		
+		String filePath = uploadDir + "/" + fileName;
+        System.out.println("delete downloadsDir : " + filePath);
+        
+        File file = new File(filePath);
+        
+        // 파일 존재 여부 확인
+        if (file.exists()) {
+            // 파일 삭제
+            boolean deleted = file.delete();
+            if (deleted) {
+                System.out.println("파일 삭제 성공: " + fileName);
+            } else {
+                System.out.println("파일 삭제 실패: " + fileName);
+            }
+            return deleted;
+        } else {
+            System.out.println("파일이 존재하지 않습니다: " + fileName);
+            return false;
+        }
        
 	}
 

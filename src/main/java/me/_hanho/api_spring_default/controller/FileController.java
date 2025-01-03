@@ -1,5 +1,7 @@
 package me._hanho.api_spring_default.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -7,8 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +31,18 @@ import me._hanho.api_spring_default.service.FileService;
 @RequestMapping("/file")
 public class FileController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(FileService.class);
+	
+	@Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+	
 	@Autowired
 	private FileService fileService;
 	
 	// 저장된 파일이름 가져오기
 	@GetMapping("/myfile")
 	public ResponseEntity<Map<String, Object>> getMyThing(@RequestAttribute("id") String id) {
-		System.out.println("getMyThing");
+		logger.info("getMyThing");
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		String fileName = fileService.getOriginalFile(id);
@@ -47,7 +56,7 @@ public class FileController {
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> fileUpload(@RequestParam(value="file") MultipartFile file,
 			@RequestAttribute("id") String id) {
-		System.out.println("fileUpload");
+		logger.info("fileUpload");
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		
@@ -61,7 +70,7 @@ public class FileController {
 	@CrossOrigin(exposedHeaders = "Content-Disposition")
 	@GetMapping
 	public ResponseEntity<byte[]> fileDownload(@RequestAttribute("id") String id) throws IOException {
-		System.out.println("fileDownload");
+		logger.info("fileDownload");
 		
 		String storedFileName = fileService.getStoredFile(id);
 		String originalFileName = fileService.getOriginalFile(id);
@@ -69,11 +78,14 @@ public class FileController {
 		System.out.println("Download fileName : " + originalFileName);
 		
 		// 파일을 클래스패스에서 로드합니다. (여기서는 resoures 디렉토리에 있는 파일)
-		ClassPathResource resource = new ClassPathResource("downloads/" + storedFileName);
+		String filePath = uploadDir + "/" + storedFileName;
+		File file = new File(filePath);
+		
+//		ClassPathResource resource = new ClassPathResource("downloads/" + storedFileName);
 		
 		byte[] down = null;
 		
-		try(InputStream inputStream = resource.getInputStream()) {
+		try(InputStream inputStream = new FileInputStream(file)) {
 			down = inputStream.readAllBytes();
 		}
 		

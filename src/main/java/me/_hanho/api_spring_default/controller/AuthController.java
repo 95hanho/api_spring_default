@@ -3,6 +3,8 @@ package me._hanho.api_spring_default.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import me._hanho.api_spring_default.model.Token;
 import me._hanho.api_spring_default.model.User;
 import me._hanho.api_spring_default.service.AuthService;
+import me._hanho.api_spring_default.service.FileService;
 import me._hanho.api_spring_default.service.TokenService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(FileService.class);
 
 	@Autowired
 	private AuthService authService;
@@ -35,7 +40,7 @@ public class AuthController {
 	// 유저정보가져오기
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> getUserInfo(@RequestAttribute("id") String id) {
-		System.out.println("getUserInfo");
+		logger.info("getUserInfo");
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		if(id != null) {
@@ -45,6 +50,7 @@ public class AuthController {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			result.put("msg", "token제대로 안됨");
+			logger.error("token 제대로 안온듯");
 			return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
 		}
 	}
@@ -52,7 +58,7 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@ModelAttribute User user, @RequestHeader("user-agent") String agent
 			, HttpServletRequest request) {
-		System.out.println("login");
+		logger.info("login" + user.getId());
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		User checkUser = authService.getUser(user);
@@ -77,6 +83,7 @@ public class AuthController {
 			result.put("msg", "입력하신 아이디 또는 비밀번호가 일치하지 않습니다");
 			result.put("response_code", 430);
 			result.put("status", "success");
+			logger.error("입력하신 아이디 또는 비밀번호가 일치하지 않습니다");
 			return new ResponseEntity<>(
 					result
 					, HttpStatus.BAD_REQUEST);
@@ -86,7 +93,7 @@ public class AuthController {
 	@PostMapping("/token")
 	public ResponseEntity<Map<String, Object>> reToken(@RequestParam("refresh_token") String refresh_token,
 			HttpServletRequest request, @RequestHeader("user-agent") String agent) {
-		System.out.println("reToken " + refresh_token);
+		logger.info("reToken " + refresh_token);
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		Claims claims = null;
