@@ -40,4 +40,8 @@
 	        WHERE id = #{id}
 	    ) AS exists_flag
 	</select>
+	<insert id="joinMember">
+		INSERT INTO api_spring_default_user(id, password, name, zonecode, address, birthday, phone, email)
+		VALUES(#{id}, #{password}, #{name}, #{zonecode}, #{address}, #{birthday}, #{phone}, #{email})
+	</insert>
 </mapper>

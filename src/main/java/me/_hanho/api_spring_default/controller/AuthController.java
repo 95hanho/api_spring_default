@@ -63,6 +63,8 @@ public class AuthController {
 
 		User checkUser = authService.getUser(user);
 		if(checkUser != null) {
+			boolean isMatch = passwordEncoder.matches(rawPassword, encodedPassword);
+			
 			User onlyId = new User();
 			onlyId.setId(checkUser.getId());
 			String accessToken = tokenService.makeJwtToken(6L, onlyId);
@@ -91,6 +93,7 @@ public class AuthController {
 		}
 	}
 	
+	
 	@GetMapping("/id")
 	public ResponseEntity<Map<String, Object>> idDuplcheck(@RequestParam("id") String id) {
 		logger.info("idDuplcheck");
@@ -118,7 +121,7 @@ public class AuthController {
 	
 	@PostMapping("/member")
 	public ResponseEntity<Map<String, Object>> join(@ModelAttribute User user) {
-		logger.info("join", user);
+		logger.info("join : " + user);
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		authService.joinMember(user);

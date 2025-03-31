@@ -1,6 +1,7 @@
 package me._hanho.api_spring_default.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import me._hanho.api_spring_default.model.Token;
@@ -10,6 +11,13 @@ import me._hanho.api_spring_default.repository.AuthRepository;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+	private final PasswordEncoder passwordEncoder;
+	
+	 // 생성자 주입
+    public AuthServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+	}
+	
 	@Autowired
 	private AuthRepository authDAO;
 	
@@ -43,6 +51,11 @@ public class AuthServiceImpl implements AuthService {
 		return authDAO.getId(id);
 	}
 
+	@Override
+	public void joinMember(User user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		authDAO.joinMember(user);
+	}
 
 	
 }

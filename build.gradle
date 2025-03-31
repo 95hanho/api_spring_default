@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security' // 스프링보안(비밀번호 암호화)
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // 로그인토큰
 	implementation 'org.slf4j:slf4j-api:2.0.9' // SLF4J API

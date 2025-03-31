@@ -22,5 +22,6 @@ public interface AuthMapper {
 
 	int getId(String id);
 
+	void joinMember(User user);
 	
 }

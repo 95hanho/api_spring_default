@@ -41,6 +41,10 @@ public class AuthRepository {
 		return authMapper.getId(id) == 1;
 	}
 
+	public void joinMember(User user) {
+		authMapper.joinMember(user);
+	}
+
 
 
 
