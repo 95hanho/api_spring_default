@@ -15,6 +15,8 @@ public interface AuthService {
 
 	void updateToken(Token token);
 
-	
+	boolean getId(String id);
+
+	void joinMember(User user);
 
 }

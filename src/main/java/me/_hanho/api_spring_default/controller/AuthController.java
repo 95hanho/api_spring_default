@@ -26,7 +26,7 @@ import me._hanho.api_spring_default.service.FileService;
 import me._hanho.api_spring_default.service.TokenService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -55,7 +55,7 @@ public class AuthController {
 		}
 	}
 	
-	@PostMapping("/login")
+	@PostMapping
 	public ResponseEntity<Map<String, Object>> login(@ModelAttribute User user, @RequestHeader("user-agent") String agent
 			, HttpServletRequest request) {
 		logger.info("login" + user.getId());
@@ -84,12 +84,49 @@ public class AuthController {
 			result.put("response_code", 430);
 			result.put("status", "success");
 			logger.error("입력하신 아이디 또는 비밀번호가 일치하지 않습니다");
+			
 			return new ResponseEntity<>(
 					result
 					, HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	@GetMapping("/id")
+	public ResponseEntity<Map<String, Object>> idDuplcheck(@RequestParam("id") String id) {
+		logger.info("idDuplcheck");
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		boolean hasId = authService.getId(id);
+		
+		if(!hasId) {
+			result.put("msg", "success");
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			result.put("msg", "fail");
+			return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping("/phone")
+	public ResponseEntity<Map<String, Object>> phoneAuth(@RequestParam("phone") String phone) {
+		logger.info("phoneAuth");
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		result.put("msg", "success");
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/member")
+	public ResponseEntity<Map<String, Object>> join(@ModelAttribute User user) {
+		logger.info("join", user);
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		authService.joinMember(user);
+		
+		result.put("msg", "success");
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
 	@PostMapping("/token")
 	public ResponseEntity<Map<String, Object>> reToken(@RequestParam("refresh_token") String refresh_token,
 			HttpServletRequest request, @RequestHeader("user-agent") String agent) {

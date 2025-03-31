@@ -34,4 +34,10 @@
 		SET refresh_token = #{refresh_token}
 		WHERE token_id = #{token_id}
 	</update>
+	<select id="getId" resultType="int">
+	    SELECT EXISTS (
+	        SELECT 1 FROM api_spring_default_user
+	        WHERE id = #{id}
+	    ) AS exists_flag
+	</select>
 </mapper>
