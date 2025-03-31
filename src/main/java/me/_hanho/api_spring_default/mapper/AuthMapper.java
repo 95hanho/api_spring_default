@@ -20,6 +20,7 @@ public interface AuthMapper {
 
 	void updateToken(Token token);
 
-	
+	int getId(String id);
+
 	
 }

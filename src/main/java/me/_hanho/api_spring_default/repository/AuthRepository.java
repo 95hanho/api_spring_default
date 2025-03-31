@@ -1,5 +1,6 @@
 package me._hanho.api_spring_default.repository;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,11 @@ public class AuthRepository {
 		int token_id = authMapper.getToken_id(token);
 		token.setToken_id(token_id);
 		authMapper.updateToken(token);
+	}
+
+	public boolean getId(String id) {
+		System.out.println(authMapper.getId(id));
+		return authMapper.getId(id) == 1;
 	}
 
 

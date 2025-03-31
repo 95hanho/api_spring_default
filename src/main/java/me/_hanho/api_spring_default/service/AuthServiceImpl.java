@@ -38,6 +38,11 @@ public class AuthServiceImpl implements AuthService {
 		authDAO.updateToken(token);
 	}
 
+	@Override
+	public boolean getId(String id) {
+		return authDAO.getId(id);
+	}
+
 
 	
 }
