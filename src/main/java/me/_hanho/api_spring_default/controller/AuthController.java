@@ -22,7 +22,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import me._hanho.api_spring_default.model.Token;
 import me._hanho.api_spring_default.model.User;
 import me._hanho.api_spring_default.service.AuthService;
-import me._hanho.api_spring_default.service.FileService;
 import me._hanho.api_spring_default.service.TokenService;
 
 @RestController
@@ -58,13 +57,20 @@ public class AuthController {
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> login(@ModelAttribute User user, @RequestHeader("user-agent") String agent
 			, HttpServletRequest request) {
-		logger.info("login" + user.getId());
+		logger.info("login :" + user.getId());
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		User checkUser = authService.getUser(user);
-		if(checkUser != null) {
-			boolean isMatch = passwordEncoder.matches(rawPassword, encodedPassword);
+		if (checkUser == null || !authService.passwordCheck(user.getPassword(), checkUser.getPassword())) {
+			result.put("msg", "입력하신 아이디 또는 비밀번호가 일치하지 않습니다");
+			result.put("response_code", 430);
+			result.put("status", "success");
+			logger.error("입력하신 아이디 또는 비밀번호가 일치하지 않습니다");
 			
+			return new ResponseEntity<>(
+					result
+					, HttpStatus.BAD_REQUEST);
+		} else {
 			User onlyId = new User();
 			onlyId.setId(checkUser.getId());
 			String accessToken = tokenService.makeJwtToken(6L, onlyId);
@@ -81,15 +87,6 @@ public class AuthController {
 			return new ResponseEntity<>(
 					result
 					, HttpStatus.OK);
-		} else {
-			result.put("msg", "입력하신 아이디 또는 비밀번호가 일치하지 않습니다");
-			result.put("response_code", 430);
-			result.put("status", "success");
-			logger.error("입력하신 아이디 또는 비밀번호가 일치하지 않습니다");
-			
-			return new ResponseEntity<>(
-					result
-					, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

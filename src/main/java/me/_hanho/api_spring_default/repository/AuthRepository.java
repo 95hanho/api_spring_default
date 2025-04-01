@@ -40,10 +40,12 @@ public class AuthRepository {
 		System.out.println(authMapper.getId(id));
 		return authMapper.getId(id) == 1;
 	}
-
+	
 	public void joinMember(User user) {
 		authMapper.joinMember(user);
 	}
+
+	
 
 
 

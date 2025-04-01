@@ -50,12 +50,16 @@ public class AuthServiceImpl implements AuthService {
 	public boolean getId(String id) {
 		return authDAO.getId(id);
 	}
-
+	
 	@Override
 	public void joinMember(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		authDAO.joinMember(user);
 	}
 
+	@Override
+	public boolean passwordCheck(String password, String password2) {
+		return passwordEncoder.matches(password, password2);
+	}
 	
 }

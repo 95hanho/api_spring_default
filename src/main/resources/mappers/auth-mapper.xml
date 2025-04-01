@@ -4,7 +4,7 @@
 	<select id="getUser">
 		SELECT *
 		FROM api_spring_default_user
-		WHERE id = #{id} AND pwd = #{pwd}
+		WHERE id = #{id}
 	</select>
 	<select id="getUser2">
 		SELECT *

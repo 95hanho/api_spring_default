@@ -16,7 +16,9 @@ public interface AuthService {
 	void updateToken(Token token);
 
 	boolean getId(String id);
-
+	
 	void joinMember(User user);
+
+	boolean passwordCheck(String password, String password2);
 
 }
