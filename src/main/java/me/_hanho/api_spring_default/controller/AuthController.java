@@ -25,7 +25,7 @@ import me._hanho.api_spring_default.service.AuthService;
 import me._hanho.api_spring_default.service.TokenService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/bapi/auth")
 public class AuthController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);

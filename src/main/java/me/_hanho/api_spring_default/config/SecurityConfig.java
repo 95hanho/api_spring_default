@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (REST API에서는 주로 비활성화)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/**").permitAll() // REST API 엔드포인트는 인증 없이 접근 가능
+                .requestMatchers("/bapi/**").permitAll() // REST API 엔드포인트는 인증 없이 접근 가능
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login.disable()) // 폼 로그인 비활성화
