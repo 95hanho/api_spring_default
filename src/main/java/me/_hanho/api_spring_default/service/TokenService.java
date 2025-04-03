@@ -20,13 +20,13 @@ private static final String SECRET_KEY = "HANHOSEONGTOKENTESTHANHOSEONGTOKENTEST
 	 * 토큰 생성하기
 	 * @return
 	 */
-	public String makeJwtToken(Long expMinutes) {
+	public String makeJwtToken(int seconds) {
 		Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 		
 		Date now = new Date();
 		Date expire = new Date();
-		Long expiredTime = 1000 * 60L; // 현재 1분
-		expiredTime = expiredTime * expMinutes; // 1분 * 원하는 만료 시간(분)
+		Long expiredTime = 1000 * 1L; // 현재 1초
+		expiredTime = expiredTime * seconds; // 1분 * 원하는 만료 시간(분)
 		expire.setTime(expire.getTime() + expiredTime);
 		
 		return Jwts.builder()
@@ -38,13 +38,13 @@ private static final String SECRET_KEY = "HANHOSEONGTOKENTESTHANHOSEONGTOKENTEST
 				.compact();
 	}
 	
-	public String makeJwtToken(Long expMinutes, User user) {
+	public String makeJwtToken(int seconds, User user) {
 		Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 		
 		Date now = new Date();
 		Date expire = new Date();
-		Long expiredTime = 1000 * 60L; // 현재 1분
-		expiredTime = expiredTime * expMinutes; // 1분 * 원하는 만료 시간(분)
+		Long expiredTime = 1000 * 1L; // 현재 1분
+		expiredTime = expiredTime * seconds; // 1분 * 원하는 만료 시간(분)
 		expire.setTime(expire.getTime() + expiredTime);
 		
 		return Jwts.builder()

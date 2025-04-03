@@ -73,8 +73,8 @@ public class AuthController {
 		} else {
 			User onlyId = new User();
 			onlyId.setId(checkUser.getId());
-			String accessToken = tokenService.makeJwtToken(6L, onlyId);
-			String refreshToken = tokenService.makeJwtToken(16L);
+			String accessToken = tokenService.makeJwtToken(10, onlyId);
+			String refreshToken = tokenService.makeJwtToken(30);
 			String ipAddress = request.getRemoteAddr();
 			Token token = new Token(ipAddress, agent, refreshToken, checkUser.getId());
 			authService.insertToken(token);
@@ -149,8 +149,8 @@ public class AuthController {
 			if(checkUser != null) {
 				User onlyId = new User();
 				onlyId.setId(checkUser.getId());
-				String accessToken = tokenService.makeJwtToken(6L, onlyId);
-				String refreshToken = tokenService.makeJwtToken(16L);
+				String accessToken = tokenService.makeJwtToken(10, onlyId);
+				String refreshToken = tokenService.makeJwtToken(30);
 				Token token2 = new Token(ipAddress, agent, refreshToken, checkUser.getId());
 				authService.updateToken(token2);
 				
