@@ -57,7 +57,7 @@ public class AuthController {
 	@PostMapping
 	public ResponseEntity<Map<String, Object>> login(@ModelAttribute User user, @RequestHeader("user-agent") String agent
 			, HttpServletRequest request) {
-		logger.info("login :" + user.getId());
+		logger.info("login :" + user);
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		User checkUser = authService.getUser(user);
@@ -73,10 +73,10 @@ public class AuthController {
 		} else {
 			User onlyId = new User();
 			onlyId.setId(checkUser.getId());
-			String accessToken = tokenService.makeJwtToken(600, onlyId);
-			String refreshToken = tokenService.makeJwtToken(1800);
+			String accessToken = tokenService.makeJwtToken(60 * 10, onlyId);
+			String refreshToken = tokenService.makeJwtToken(60 * 30);
 			String ipAddress = request.getRemoteAddr();
-			Token token = new Token(ipAddress, agent, refreshToken, checkUser.getId());
+			Token token = Token.builder().connect_ip(ipAddress).connect_agent(agent).refresh_token(refreshToken).id(checkUser.getId()).build();
 			authService.insertToken(token);
 			
 			result.put("msg", "로그인");
@@ -143,7 +143,7 @@ public class AuthController {
 		
 		if(claims != null) {
 			String ipAddress = request.getRemoteAddr();
-			Token token = new Token(ipAddress, agent, refresh_token);
+			Token token = Token.builder().connect_ip(ipAddress).connect_agent(agent).refresh_token(refresh_token).build();
 			User checkUser = authService.getUser(token);
 			
 			if(checkUser != null) {
@@ -151,7 +151,7 @@ public class AuthController {
 				onlyId.setId(checkUser.getId());
 				String accessToken = tokenService.makeJwtToken(600, onlyId);
 				String refreshToken = tokenService.makeJwtToken(1800);
-				Token token2 = new Token(ipAddress, agent, refreshToken, checkUser.getId());
+				Token token2 = Token.builder().connect_ip(ipAddress).connect_agent(agent).refresh_token(refresh_token).id(checkUser.getId()).build(); 
 				authService.updateToken(token2);
 				
 				result.put("msg", "access 토큰 재발급 성공");

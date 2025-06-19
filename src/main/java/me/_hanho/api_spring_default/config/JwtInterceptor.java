@@ -28,14 +28,15 @@ public class JwtInterceptor implements HandlerInterceptor {
 		String access_token = request.getHeader("authorization");
 //		logger.info("preHandle ===> access_token : " + access_token);
 		
+		// 토큰이 있으면
 		if (access_token != null && !access_token.isEmpty()) {
-			logger.info("access_token : " + access_token);
             try {
                 // JWT 파싱 및 복호화
                 Claims claims = tokenService.parseJwtToken(access_token);
 
                 // login_id 추출
                 String id = claims.get("id", String.class);
+                logger.info("tokenPass => id : " + id);
 
                 // HttpServletRequest에 login_id 추가
                 request.setAttribute("id", id);
