@@ -33,6 +33,7 @@ public class AuthRepository {
 	public void updateToken(Token token) {
 		int token_id = authMapper.getToken_id(token);
 		token.setToken_id(token_id);
+		System.out.println("TEST : " + token_id + ", " + token);
 		authMapper.updateToken(token);
 	}
 

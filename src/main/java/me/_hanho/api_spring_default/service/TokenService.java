@@ -25,8 +25,7 @@ private static final String SECRET_KEY = "HANHOSEONGTOKENTESTHANHOSEONGTOKENTEST
 		
 		Date now = new Date();
 		Date expire = new Date();
-		Long expiredTime = 1000 * 1L; // 현재 1초
-		expiredTime = expiredTime * seconds; // 1분 * 원하는 만료 시간(분)
+		Long expiredTime = seconds * 1000L; // seconds * 1초 
 		expire.setTime(expire.getTime() + expiredTime);
 		
 		return Jwts.builder()
@@ -43,8 +42,8 @@ private static final String SECRET_KEY = "HANHOSEONGTOKENTESTHANHOSEONGTOKENTEST
 		
 		Date now = new Date();
 		Date expire = new Date();
-		Long expiredTime = 1000 * 1L; // 현재 1분
-		expiredTime = expiredTime * seconds; // 1분 * 원하는 만료 시간(분)
+		
+		Long expiredTime = seconds * 1000L; // seconds * 1초 
 		expire.setTime(expire.getTime() + expiredTime);
 		
 		return Jwts.builder()

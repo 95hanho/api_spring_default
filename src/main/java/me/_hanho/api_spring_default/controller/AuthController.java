@@ -73,7 +73,8 @@ public class AuthController {
 		} else {
 			User onlyId = new User();
 			onlyId.setId(checkUser.getId());
-			String accessToken = tokenService.makeJwtToken(60 * 10, onlyId);
+//			String accessToken = tokenService.makeJwtToken(60 * 10, onlyId);
+			String accessToken = tokenService.makeJwtToken(5, onlyId);
 			String refreshToken = tokenService.makeJwtToken(60 * 30);
 			String ipAddress = request.getRemoteAddr();
 			Token token = Token.builder().connect_ip(ipAddress).connect_agent(agent).refresh_token(refreshToken).id(checkUser.getId()).build();
@@ -149,23 +150,27 @@ public class AuthController {
 			if(checkUser != null) {
 				User onlyId = new User();
 				onlyId.setId(checkUser.getId());
-				String accessToken = tokenService.makeJwtToken(600, onlyId);
-				String refreshToken = tokenService.makeJwtToken(1800);
-				Token token2 = Token.builder().connect_ip(ipAddress).connect_agent(agent).refresh_token(refresh_token).id(checkUser.getId()).build(); 
+//				String accessToken = tokenService.makeJwtToken(60 * 10, onlyId);
+				String re_accessToken = tokenService.makeJwtToken(5, onlyId);
+				String re_refreshToken = tokenService.makeJwtToken(60 * 30);
+				Token token2 = Token.builder().connect_ip(ipAddress).connect_agent(agent).refresh_token(re_refreshToken).id(checkUser.getId()).build(); 
 				authService.updateToken(token2);
 				
 				result.put("msg", "access 토큰 재발급 성공");
-				result.put("access_token", accessToken);
-				result.put("refresh_token", refreshToken);
+				result.put("access_token", re_accessToken);
+				result.put("refresh_token", re_refreshToken);
 				result.put("response_code", 200);
 				result.put("status", "success");
+				logger.info("reToken success !!! ");
 				return new ResponseEntity<>(result, HttpStatus.OK);
 			} else {
 				result.put("msg", "token제대로 안됨");
+				logger.error("reToken error1");
 				return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
 			}
 		} else {
 			result.put("msg", "token제대로 안됨");
+			logger.error("reToken error1");
 			return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
 		}
 	}

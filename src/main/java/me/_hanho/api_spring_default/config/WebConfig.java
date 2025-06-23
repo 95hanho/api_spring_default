@@ -15,15 +15,18 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-        .allowedOrigins("http://localhost:5173", "https://95hanho.pe.kr/", "http://localhost:3000") // 클라이언트 도메인 명시
-//        .allowedOrigins("https://95hanho.pe.kr/")
-        .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
-        .allowCredentials(true); // 인증 정보 허용
+		.allowedOrigins("http://localhost:5173", "https://95hanho.pe.kr", "http://localhost:3000")
+		.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+		.allowedHeaders("*") // ✅ 모든 헤더 허용
+		.allowCredentials(true)
+		.exposedHeaders("Authorization"); // 클라이언트에서 Authorization 응답 헤더를 읽게 하려면
 	}
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor)
-			.addPathPatterns("/**");
+//		.addPathPatterns("/**");
+			.addPathPatterns("/bapi/auth", "/bapi/board/**");
+//			.excludePathPatterns("/bapi/auth/signup");
 	}
 }
