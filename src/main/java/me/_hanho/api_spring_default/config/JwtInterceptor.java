@@ -24,7 +24,13 @@ public class JwtInterceptor implements HandlerInterceptor {
 			throws Exception {
 		
 		String uri = request.getRequestURI();
-		String access_token = request.getHeader("authorization");
+		String authorizationHeader = request.getHeader("Authorization");
+		String access_token = null;
+		 
+		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+			access_token = authorizationHeader.substring(7); // "Bearer " 이후의 문자열만 추출
+	    }
+		 
 		logger.info("preHandle ===> uri : "+ uri + ", access_token : " + access_token);
 		String method = request.getMethod(); // "GET", "POST", ...
 		
