@@ -7,14 +7,14 @@
 		WHERE id = #{id}
 	</select>
 	<select id="getUser2">
-		SELECT *
+		SELECT u.id, name, zonecode, address, birthday, phone, email, u.created_at
 		FROM api_spring_default_user u
 		JOIN api_spring_default_token t ON u.id = t.id
 		WHERE connect_ip = #{connect_ip} AND connect_agent = #{connect_agent} 
 			AND refresh_token = #{refresh_token}
 	</select>
 	<select id="getUser3">
-		SELECT *
+		SELECT id, name, zonecode, address, birthday, phone, email, created_at
 		FROM api_spring_default_user
 		WHERE id = #{id}
 	</select>

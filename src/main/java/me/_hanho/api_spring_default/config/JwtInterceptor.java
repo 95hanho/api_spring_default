@@ -26,6 +26,13 @@ public class JwtInterceptor implements HandlerInterceptor {
 		String uri = request.getRequestURI();
 		String authorizationHeader = request.getHeader("Authorization");
 		String access_token = null;
+		
+		String type = request.getParameter("type");
+		
+		// nextjs 전용
+		if(type != null && type.equals("nextjs")) {
+			return true;
+		}
 		 
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			access_token = authorizationHeader.substring(7); // "Bearer " 이후의 문자열만 추출
